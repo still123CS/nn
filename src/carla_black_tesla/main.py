@@ -1,6 +1,7 @@
 import carla
 import sys
 import time
+from follow_camera import FollowCamera
 
 def main():
     print("=" * 60)
@@ -46,14 +47,19 @@ def main():
         vehicle.set_autopilot(True)
         print("[INFO] Autopilot enabled - vehicle is driving")
         
+        camera = FollowCamera(world, vehicle)
+        print("[INFO] Follow camera initialized")
+        
         print("\n[INFO] Press Ctrl+C to stop and cleanup")
         try:
             while True:
+                camera.update()
+                
                 location = vehicle.get_location()
                 velocity = vehicle.get_velocity()
                 speed = ((velocity.x**2 + velocity.y**2 + velocity.z**2) ** 0.5) * 3.6
                 print(f"[INFO] Speed: {speed:.1f} km/h | Position: ({location.x:.1f}, {location.y:.1f})")
-                time.sleep(1)
+                time.sleep(0.1)
         except KeyboardInterrupt:
             print("\n[INFO] User interrupted the program")
         finally:
