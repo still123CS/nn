@@ -2,6 +2,7 @@ import carla
 import sys
 import time
 from follow_camera import FollowCamera
+from speed_controller import SpeedController
 
 def main():
     print("=" * 60)
@@ -50,10 +51,14 @@ def main():
         camera = FollowCamera(world, vehicle)
         print("[INFO] Follow camera initialized")
         
+        speed_controller = SpeedController(vehicle, max_speed_kmh=50)
+        print("[INFO] Speed controller initialized (max speed: 50 km/h)")
+        
         print("\n[INFO] Press Ctrl+C to stop and cleanup")
         try:
             while True:
                 camera.update()
+                speed_controller.control_speed()
                 
                 location = vehicle.get_location()
                 velocity = vehicle.get_velocity()
